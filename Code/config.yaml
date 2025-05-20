@@ -1,0 +1,46 @@
+model:
+  layers:
+    # implicit: one first linear layer from input dimension to the input size of the first hidden layer
+    # second layer:
+    - type: Linear
+      input_size: 1024
+      output_size: 512
+    - type: LayerNorm
+      normalized_shape: 512
+    - type: ReLU
+    - type: Dropout
+    - type: Linear
+      input_size: 512
+      output_size: 256
+    - type: LayerNorm
+      normalized_shape: 256
+    - type: ReLU
+    - type: Dropout
+    - type: Linear
+      input_size: 256
+      output_size: 64
+    - type: LayerNorm
+      normalized_shape: 64
+    - type: ReLU
+    - type: Dropout
+    - type: Linear
+      input_size: 64
+      output_size: 1
+    - type: Sigmoid
+
+training:
+  mode: 'other_prompt'
+
+train_MLP:
+  layer_index: 'all'
+  batch_size: 16
+  epochs: [10,15,20,25,30,50]
+  learning_rate: 0.001
+  weight_decay: 0.0002
+  mode: ['train_prompt'] # 'no_prompt' 'train_prompt'  'train_prompt_ablation' 
+
+eval_model:
+  mode: ['other_prompt'] # 'no_prompt' 'train_prompt' 'other_prompt' 'train_prompt_ablation' 'other_prompt_ablation'
+
+test_time:
+  layer_index: 10
